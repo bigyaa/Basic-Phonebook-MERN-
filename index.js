@@ -33,10 +33,17 @@ app.get("/api/persons", (request, response) => {
 
 app.get("/info", (request, response) => {
 	const date = new Date();
-  const text = `Phonebook has info for ${persons.length} people as of:
+	const text = `Phonebook has info for ${persons.length} people as of:
   ${date}`;
-   
+
 	response.send(text);
+});
+
+app.get(`/api/person/:id`, (request, response) => {
+	const id = Number(request.params.id);
+	const person = persons.find(person => person.id === id);
+
+	person ? response.json(person) : response.status(404).end();
 });
 
 const PORT = 3002;
