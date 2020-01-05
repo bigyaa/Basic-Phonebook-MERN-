@@ -1,0 +1,29 @@
+{
+  "name": "part3_phonebook",
+  "version": "1.0.0",
+  "description": "Backend implementation for the exercises related to phonebook",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node index.js",
+    "watch": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/bigyaa"
+  },
+  "keywords": [
+    "node",
+    "backend",
+    "phonebook",
+    "fullstack"
+  ],
+  "author": "bigya bajracharya",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
