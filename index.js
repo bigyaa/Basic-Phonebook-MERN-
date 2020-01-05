@@ -23,10 +23,6 @@ let persons = [
 	}
 ];
 
-app.get("/", (request, response) => {
-	response.send("works!");
-});
-
 app.get("/api/persons", (request, response) => {
 	response.json(persons);
 });
@@ -46,19 +42,29 @@ app.get(`/api/person/:id`, (request, response) => {
 	person ? response.json(person) : response.status(404).end();
 });
 
-app.delete('/api/person/:id', (request, response) => {
+app.delete("/api/person/:id", (request, response) => {
 	const id = Number(request.params.id);
 	persons = persons.filter(person => person.id !== id);
 
 	response.status(204).end();
 });
 
-app.post('/api/persons', (request, response) => {
-  const newPerson = request.body;
-  const MAX = 99999;
-  newPerson.id=Math.floor(Math.random()*MAX);
+app.post("/api/persons", (request, response) => {
+	const MAX = 99999;
 
-	response.json(newPerson);
+	const newPerson = request.body;
+	const isMissing = !(newPerson.name && newPerson.number);
+	const nameExists = persons.find(person => person.name === newPerson.name);
+
+	newPerson.id = Math.floor(Math.random() * MAX);
+
+	isMissing
+		? response.status(404).send({ error: "The name or number is missing" })
+		: nameExists
+		? response
+				.status(404)
+				.send({ error: "The name already exists in the phonebook" })
+		: response.json(newPerson);
 });
 
 const PORT = 3002;
