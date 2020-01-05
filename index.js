@@ -53,12 +53,12 @@ app.post("/api/persons", (request, response) => {
 	const MAX = 99999;
 
 	const newPerson = request.body;
-	const isMissing = !(newPerson.name && newPerson.number);
+	const dataMissing = !(newPerson.name && newPerson.number);
 	const nameExists = persons.find(person => person.name === newPerson.name);
 
 	newPerson.id = Math.floor(Math.random() * MAX);
 
-	isMissing
+	dataMissing
 		? response.status(404).send({ error: "The name or number is missing" })
 		: nameExists
 		? response
