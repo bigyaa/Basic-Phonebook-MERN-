@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
@@ -5,10 +7,12 @@ const cors = require("cors");
 
 const app = express();
 
+const Person = require("./models/person");
+
 app.use(bodyParser.json());
-app.use(morgan('tiny'));
+app.use(morgan("tiny"));
 app.use(cors());
-app.use(express.static('build'));
+app.use(express.static("build"));
 
 let persons = [
 	{
@@ -29,7 +33,7 @@ let persons = [
 ];
 
 app.get("/api/persons", (request, response) => {
-	response.json(persons);
+	Person.find({}).then(personss => response.json(personss));
 });
 
 app.get("/info", (request, response) => {
@@ -44,7 +48,9 @@ app.get("/api/persons/:id", (request, response) => {
 	const id = Number(request.params.id);
 	const person = persons.find(person => person.id === id);
 
-	person ? response.json(person) : response.status(404).end({error: 'olllll'});
+	person
+		? response.json(person)
+		: response.status(404).end({ error: "olllll" });
 });
 
 app.delete("/api/persons/:id", (request, response) => {
