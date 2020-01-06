@@ -6,7 +6,9 @@
   "scripts": {
     "test": "npm test",
     "start": "node index.js",
-    "watch": "nodemon index.js"
+    "watch": "nodemon index.js",
+    "deploy": "git push heroku master",
+    "logs:prod": "heroku logs --tail"
   },
   "repository": {
     "type": "git",

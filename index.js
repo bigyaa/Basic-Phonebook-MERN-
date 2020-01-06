@@ -40,14 +40,14 @@ app.get("/info", (request, response) => {
 	response.send(text);
 });
 
-app.get(`/api/person/:id`, (request, response) => {
+app.get("/api/persons/:id", (request, response) => {
 	const id = Number(request.params.id);
 	const person = persons.find(person => person.id === id);
 
-	person ? response.json(person) : response.status(404).end();
+	person ? response.json(person) : response.status(404).end({error: 'olllll'});
 });
 
-app.delete("/api/person/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response) => {
 	const id = Number(request.params.id);
 	persons = persons.filter(person => person.id !== id);
 
