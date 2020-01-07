@@ -22,7 +22,14 @@ app.get("/api/persons", (request, response) => {
 
 app.get("/info", (request, response) => {
   const date = new Date();
-  const text = `Phonebook has info for ${persons.length} people as of:
+  let numOfEntries;
+
+  Person.find({}).then(people => {
+    console.log("iiiiiiiiiiiiiii", people);
+    numOfEntries = people.length;
+  });
+
+  const text = `Phonebook has info for ${numOfEntries} people as of:
   ${date}`;
 
   response.send(text);
