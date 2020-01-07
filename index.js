@@ -14,20 +14,20 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.static("build"));
 
-let peopleArray=[];
+let peopleArray = [];
 
-app.get("/api/persons", (request, response) => {
-  Person.find({}).then(people =>
-    {
-      peopleArray=people;
-      response.json(people.map(person =>    
-       person.toJSON()))
-       } );
+app.get("/api/persons", (request, response, next) => {
+  Person.find({})
+    .then(people => {
+      peopleArray = people;
+      response.json(people.map(person => person.toJSON()));
+    })
+    .catch(error => next(error));
 });
 
 app.get("/info", (request, response) => {
   const date = new Date();
-con
+  con;
   const text = `Phonebook has info for ${peopleArray.length} people as of:
   ${date}`;
 
@@ -52,46 +52,51 @@ app.delete("/api/persons/:id", (request, response, next) => {
 
 app.put("/api/persons/:id", (request, response, next) => {
   const id = request.params.id;
-  const updatedPerson={
+  const updatedPerson = {
     name: request.body.name,
     number: request.body.number
   };
 
-  Person.findByIdAndUpdate(id, updatedPerson, {new:true})
+  Person.findByIdAndUpdate(id, updatedPerson, { new: true })
     .then(result => response.json(result.toJSON()))
     .catch(error => next(error));
 });
 
-app.post("/api/persons", (request, response) => {
+app.post("/api/persons", (request, response, next) => {
   const newPerson = new Person(request.body);
 
   const dataMissing = !(newPerson.name && newPerson.number);
 
   dataMissing
     ? response.status(404).send({ error: "The name or number is missing" })
-    : newPerson.save().then(savedPerson => response.json(savedPerson.toJSON()));
+    : newPerson
+        .save()
+        .then(savedPerson => response.json(savedPerson.toJSON()))
+        .catch(error => next(error));
 });
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
+  response.status(404).send({ error: "unknown endpoint" });
+};
 
 // handler of requests with unknown endpoint
-app.use(unknownEndpoint)
+app.use(unknownEndpoint);
 
 const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
+  console.error(error.message);
 
-  if (error.name === 'CastError' && error.kind === 'ObjectId') {
-    return response.status(400).send({ error: 'malformatted id' })
+  if (error.name === "CastError" && error.kind === "ObjectId") {
+    return response.status(400).send({ error: "malformatted id" });
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   } else {
-    return response.status(404).send({ error: 'id doesnt exist.' })
+    return response.status(404).send({ error: error.message });
   }
 
-  next(error)
-}
+  next(error);
+};
 
-app.use(errorHandler)
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
