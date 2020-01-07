@@ -38,7 +38,12 @@ app.get("/api/persons", (request, response) => {
 app.get("/api/persons/:id", (request, response) => {
   const id = request.params.id;
 
-  Person.findById(id).then(person => response.json(person.toJSON()));
+  Person.findById(id)
+    .then(person => response.json(person.toJSON()))
+    .catch(error => {
+      console.log(error);
+      response.status(404).end({ error: "Id doesn't exist" });
+    });
 });
 
 app.delete("/api/persons/:id", (request, response) => {
