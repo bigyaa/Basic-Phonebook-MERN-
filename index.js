@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -14,72 +14,45 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.static("build"));
 
-let persons = [
-	{
-		name: "Ada Lovelace",
-		number: "39-44-5323523",
-		id: 2
-	},
-	{
-		name: "Dan Abramov",
-		number: "12-43-234345",
-		id: 3
-	},
-	{
-		name: "Mary Poppendieck",
-		number: "39-23-6423122",
-		id: 4
-	}
-];
-
 app.get("/api/persons", (request, response) => {
-	console.log("PERSONS", Person);
-	Person.find({}).then(personss => console.log("PERSONS", persons) || response.json(personss));
+  Person.find({}).then(people =>
+    response.json(people.map(person => person.toJSON()))
+  );
 });
 
 app.get("/info", (request, response) => {
-	const date = new Date();
-	const text = `Phonebook has info for ${persons.length} people as of:
+  const date = new Date();
+  const text = `Phonebook has info for ${persons.length} people as of:
   ${date}`;
 
-	response.send(text);
+  response.send(text);
 });
 
 app.get("/api/persons/:id", (request, response) => {
-	const id = Number(request.params.id);
-	const person = persons.find(person => person.id === id);
+  const id = request.params.id;
 
-	person
-		? response.json(person)
-		: response.status(404).end({ error: "olllll" });
+  Person.findById(id).then(person => response.json(person.toJSON()));
 });
 
 app.delete("/api/persons/:id", (request, response) => {
-	const id = Number(request.params.id);
-	persons = persons.filter(person => person.id !== id);
+  const id = request.params.id;
 
-	response.status(204).end();
+  Person.findByIdAndRemove(id)
+    .then(result => response.status(204).end())
+    .catch(error => next(error));
 });
 
 app.post("/api/persons", (request, response) => {
-	const MAX = 99999;
+  const newPerson = new Person(request.body);
 
-	const newPerson = request.body;
-	const dataMissing = !(newPerson.name && newPerson.number);
-	const nameExists = persons.find(person => person.name === newPerson.name);
+  const dataMissing = !(newPerson.name && newPerson.number);
 
-	newPerson.id = Math.floor(Math.random() * MAX);
-
-	dataMissing
-		? response.status(404).send({ error: "The name or number is missing" })
-		: nameExists
-		? response
-				.status(404)
-				.send({ error: "The name already exists in the phonebook" })
-		: response.json(newPerson);
+  dataMissing
+    ? response.status(404).send({ error: "The name or number is missing" })
+    : newPerson.save().then(savedPerson => response.json(savedPerson.toJSON()));
 });
 
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

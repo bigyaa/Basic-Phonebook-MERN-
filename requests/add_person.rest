@@ -2,7 +2,7 @@ post http://localhost:3002/api/persons
 Content-Type: application/json
 
 {
-    "id": 12,
+    "id": "12",
     "name":"Mary Poopendieck",
     "number": 4343434
 }
