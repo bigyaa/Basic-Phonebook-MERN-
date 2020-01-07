@@ -33,7 +33,8 @@ let persons = [
 ];
 
 app.get("/api/persons", (request, response) => {
-	Person.find({}).then(personss => response.json(personss));
+	console.log("PERSONS", Person);
+	Person.find({}).then(personss => console.log("PERSONS", persons) || response.json(personss));
 });
 
 app.get("/info", (request, response) => {

@@ -15,30 +15,32 @@ const url = process.env.MONGODB_URI;
 mongoose.connect(url, { useNewUrlParser: true });
 
 const personSchema = new mongoose.Schema({
-	name: String,
-	number: Number,
-	id: Number
+  name: String,
+  number: Number,
+  id: Number
 });
 
 const Person = mongoose.model("Person", personSchema);
 
 const person = new Person({
-	name: newName,
-	number: newNumber,
-	id: newId
+  name: newName,
+  number: newNumber,
+  id: newId
 });
 
-process.argv.length === 3
-	? Person.find({}).then(persons => {
-			persons.map(person => console.log(`${person.name} ${person.number}`));
-			mongoose.connection.close();
-	  })
-	: person
-			.save()
-			.then(response => {
-				console.log(
-					`added ${response.name} number ${response.number} to phonebook`
-				);
-				mongoose.connection.close();
-			})
-			.catch(error => console.log(error));
+// process.argv[1]==='node.js' && process.argv.length === 3
+// 	? Person.find({}).then(persons => {
+// 			persons.map(person => console.log(`${person.name} ${person.number}`));
+// 			mongoose.connection.close();
+// 	  })
+// 	: person
+// 			.save()
+// 			.then(response => {
+// 				console.log(
+// 					`added ${response.name} number ${response.number} to phonebook`
+// 				);
+// 				mongoose.connection.close();
+// 			})
+// 			.catch(error => console.log(error));
+
+module.exports = Person;
