@@ -10,7 +10,7 @@ mongoose.connect(url, { useNewUrlParser: true });
 
 const personSchema = new mongoose.Schema({
     name: { type: String, minLength: 3, required: true },
-    number: { type: Number, minLength: 8, required: true, unique: true },
+    number: { type: String, minLength: 8, required: true, unique: true },
     id: String
 });
 

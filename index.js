@@ -20,7 +20,7 @@ app.get('/api/persons', (request, response, next) => {
     Person.find({})
         .then(people => {
             peopleArray = people;
-            response.json(people.map(person => person.toJSON()));
+            return response.json(people.map(person => person.toJSON()));
         })
         .catch(error => next(error));
 });
@@ -62,7 +62,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 });
 
 app.post('/api/persons', (request, response, next) => {
-    const newPerson = new Person(request.body);
+    const newPerson = new Person({...request.body});
 
     const dataMissing = !(newPerson.name && newPerson.number);
 
