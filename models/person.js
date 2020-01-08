@@ -3,10 +3,11 @@ mongoose.set('useFindAndModify', false);
 
 var uniqueValidator = require('mongoose-unique-validator');
 
-const url = process.env.MONGODB_URI;
-console.log('connecting to', url);
+const {MONGODB_URL} = require('../utils/config');
 
-mongoose.connect(url, { useNewUrlParser: true });
+console.log('connecting to', MONGODB_URL);
+
+mongoose.connect(MONGODB_URL, { useNewUrlParser: true });
 
 const personSchema = new mongoose.Schema({
     name: { type: String, minLength: 3, required: true },

@@ -40,5 +40,6 @@ module.exports = {
     "arrow-spacing": [
         "error", { "before": true, "after": true }
     ],
+    "multiline-ternary":["error","always"]
     }
 };
