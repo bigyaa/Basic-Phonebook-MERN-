@@ -1,1 +1,0 @@
-{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA,SACI,WAAY,CACZ,cAAc,CACd,sBAAuB,CACvB,iBACJ","file":"main.36c4fc91.chunk.css","sourcesContent":[".success {\n    color: green;\n    font-size:20px;\n    background-color: beige;\n    text-align: center;\n}"]}
